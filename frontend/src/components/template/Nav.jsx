@@ -17,5 +17,8 @@ export default props =>
             <Link to="/relclientes">
                 <i className="fa fa-file"></i> Relatorio de clientes
             </Link>
+            <Link to="/vendas">
+                <i className="fa fa-tags"></i> Vendas
+            </Link>
         </nav>
     </aside>

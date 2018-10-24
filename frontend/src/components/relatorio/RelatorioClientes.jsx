@@ -20,19 +20,26 @@ export default class RelatorioClientes extends Component {
     state = { ...initialState}
 
     componentWillMount() {
+        this.buscarTodos()
+    }
+
+    buscarTodos(){
         axios(baseUrl).then(resp => {
             this.setState({ list: resp.data })
         })
     }
 
     buscar(){
-        console.log(this.state);
+        axios(`${baseUrl}?name_like=${this.state.name.name}`).then(resp => {
+            this.setState({ list: resp.data })
+        })
     }
 
     clear() {
         this.setState({
             name: initialState.name
         })
+        this.buscarTodos()
     }
 
     updatenField(event){

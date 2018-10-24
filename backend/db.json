@@ -29,5 +29,16 @@
       "name": "Produto 1",
       "brand": "Marca produto 1"
     }
+  ],
+  "vendas": [
+    {
+      "id": 1,
+      "cliente": "Cliente 1",
+      "produtos": [
+        {"nome": "Produto 1"},
+        {"nome": "Produto 2"},
+        {"nome": "Produto 3"}
+      ]
+    }
   ]
 }

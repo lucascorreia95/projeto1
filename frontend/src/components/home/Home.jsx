@@ -3,13 +3,12 @@ import Main from '../template/Main'
 
 export default props =>
     <Main icon="home" title="Inicio"
-        subtitle="Segundo Projeto React.">
+        subtitle="Primeiro Projeto React.">
         <div className="display-4">
             Bem-Vindo!
         </div>
         <hr />
         <p className="mb-0">
-            Sistema para exemplificar a construcao de um cadastro
-            desenvolvido em React
+            Projeto criado para treinar o desenvolvimento em React!
         </p>
     </Main>
