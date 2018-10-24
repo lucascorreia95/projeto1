@@ -9,6 +9,25 @@
       "id": 2,
       "name": "Marila Julia da Silva",
       "email": "mjds@empresa.com"
+    },
+    {
+      "name": "Lucas",
+      "email": "lucas@lucas.com",
+      "celular": "1234",
+      "id": 3
+    },
+    {
+      "name": "teste",
+      "email": "teste@teste.com",
+      "celular": "1234",
+      "id": 4
+    }
+  ],
+  "product": [
+    {
+      "id": 1,
+      "name": "Produto 1",
+      "brand": "Marca produto 1"
     }
   ]
 }

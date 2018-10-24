@@ -3,18 +3,18 @@ import axios from 'axios'
 import Main from '../template/Main'
 
 const headerProps ={
-    icon: 'users',
-    title: 'Usuarios',
-    subtitle: 'Cadastro de usuarios: Incluir, Listar, Alterar e Excluir'
+    icon: 'cube',
+    title: 'Produtos',
+    subtitle: 'Cadastro de produtos: Incluir, Listar, Alterar e Excluir'
 }
 
-const baseUrl = 'http://localhost:3001/users'
+const baseUrl = 'http://localhost:3001/product'
 const initialState = {
-    user: {name: '', email: '', celular: ''},
+    product: {name: '', brand: ''},
     list: []
 }
 
-export default class UserCrud extends Component {
+export default class ProductCrud extends Component {
 
     state = { ...initialState}
 
@@ -26,31 +26,31 @@ export default class UserCrud extends Component {
 
     clear() {
         this.setState({
-            user: initialState.user
+            product: initialState.product
         })
     }
 
     save(){
-        const user = this.state.user
-        const method = user.id ? 'put' : 'post'
-        const url = user.id ? `${baseUrl}/${user.id}` : baseUrl
-        axios[method](url, user)
+        const product = this.state.product
+        const method = product.id ? 'put' : 'post'
+        const url = product.id ? `${baseUrl}/${product.id}` : baseUrl
+        axios[method](url, product)
             .then(resp => {
                 const list = this.getUpdatedList(resp.data)
-                this.setState({ user: initialState.user, list})
+                this.setState({ product: initialState.product, list})
             })
     }
 
-    getUpdatedList(user, add = true) {
-        const list = this.state.list.filter(u => u.id !== user.id)
-        if(add) list.unshift(user)
+    getUpdatedList(product, add = true) {
+        const list = this.state.list.filter(u => u.id !== product.id)
+        if(add) list.unshift(product)
         return list
     }
 
     updatenField(event){
-        const user = { ...this.state.user }
-        user[event.target.name] = event.target.value
-        this.setState({ user })
+        const product = { ...this.state.product }
+        product[event.target.name] = event.target.value
+        this.setState({ product })
     }
 
     renderForm() {
@@ -59,9 +59,9 @@ export default class UserCrud extends Component {
                 <div className="row">
                     <div className="col-12 col-md-6">
                         <div className="form-group">
-                            <label>Nome</label>
+                            <label>Produto</label>
                             <input type="text" className="form-control"
-                                name="name" value={this.state.user.name}
+                                name="name" value={this.state.product.name}
                                 onChange={e => this.updatenField(e)}
                                 placeholder="Digite o nome ... " />
                         </div>
@@ -69,21 +69,11 @@ export default class UserCrud extends Component {
 
                     <div className="col-12 col-md-6">
                         <div className="form-group">
-                            <label>E-mail</label>
+                            <label>Marca</label>
                             <input type="text" className="form-control"
-                                name="email" value={this.state.user.email}
+                                name="brand" value={this.state.product.brand}
                                 onChange={e => this.updatenField(e)}
-                                placeholder="Digite o e-mail ... " />
-                        </div>
-                    </div>
-
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Celular</label>
-                            <input type="text" className="form-control"
-                                name="celular" value={this.state.user.celular}
-                                onChange={e => this.updatenField(e)}
-                                placeholder="Digite o celular ... " />
+                                placeholder="Digite a marca ... " />
                         </div>
                     </div>
                 </div>
@@ -105,13 +95,13 @@ export default class UserCrud extends Component {
         )
     }
 
-    load(user) {
-        this.setState({ user })
+    load(product) {
+        this.setState({ product })
     }
 
-    remove(user) {
-        axios.delete(`${baseUrl}/${user.id}`).then(resp => {
-            const list = this.getUpdatedList(user, false)
+    remove(product) {
+        axios.delete(`${baseUrl}/${product.id}`).then(resp => {
+            const list = this.getUpdatedList(product, false)
             this.setState({ list })
         })
     }
@@ -122,7 +112,7 @@ export default class UserCrud extends Component {
                 <thead>
                     <tr>
                         <th>Nome</th>
-                        <th>E-mail</th>
+                        <th>Marca</th>
                         <th>Acoes</th>
                     </tr>
                 </thead>
@@ -134,18 +124,18 @@ export default class UserCrud extends Component {
     }
 
     renderRows(){
-        return this.state.list.map(user => {
+        return this.state.list.map(product => {
             return(
-                <tr key={user.id}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
+                <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.brand}</td>
                     <td>
                         <button className="btn btn-warning"
-                            onClick={() => this.load(user)}>
+                            onClick={() => this.load(product)}>
                             <i className="fa fa-pencil"></i>
                         </button>
                         <button className="btn btn-danger ml-2"
-                            onClick={() => this.remove(user)}>
+                            onClick={() => this.remove(product)}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </td>
