@@ -28,6 +28,16 @@
       "id": 1,
       "name": "Produto 1",
       "brand": "Marca produto 1"
+    },
+    {
+      "name": "Produto 2",
+      "brand": "Marca 2",
+      "id": 2
+    },
+    {
+      "name": "Produto 3",
+      "brand": "Marca 3",
+      "id": 3
     }
   ],
   "vendas": [
@@ -35,10 +45,46 @@
       "id": 1,
       "cliente": "Cliente 1",
       "produtos": [
-        {"nome": "Produto 1"},
-        {"nome": "Produto 2"},
-        {"nome": "Produto 3"}
+        {
+          "nome": "Produto 1"
+        },
+        {
+          "nome": "Produto 2"
+        },
+        {
+          "nome": "Produto 3"
+        }
       ]
+    },
+    {
+      "cliente": "Arthur Oliveira",
+      "produtos": [
+        {
+          "name": "Produto 1",
+          "id": "Produto 1"
+        },
+        {
+          "name": "Produto 2",
+          "id": "Produto 2"
+        },
+        {
+          "name": "Produto 3",
+          "id": "Produto 3"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "cliente": "Marila Julia da Silva",
+      "produtos": [
+        {
+          "name": "Produto 1"
+        },
+        {
+          "name": "Produto 2"
+        }
+      ],
+      "id": 3
     }
   ]
 }
