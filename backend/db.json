@@ -42,49 +42,23 @@
   ],
   "vendas": [
     {
-      "id": 1,
-      "cliente": "Cliente 1",
-      "produtos": [
-        {
-          "nome": "Produto 1"
-        },
-        {
-          "nome": "Produto 2"
-        },
-        {
-          "nome": "Produto 3"
-        }
-      ]
-    },
-    {
-      "cliente": "Arthur Oliveira",
+      "cliente": "Marila Julia da Silva",
+      "idcliente": 2,
       "produtos": [
         {
           "name": "Produto 1",
-          "id": "Produto 1"
+          "id": 1
         },
         {
           "name": "Produto 2",
-          "id": "Produto 2"
+          "id": 2
         },
         {
           "name": "Produto 3",
-          "id": "Produto 3"
+          "id": 3
         }
       ],
-      "id": 2
-    },
-    {
-      "cliente": "Marila Julia da Silva",
-      "produtos": [
-        {
-          "name": "Produto 1"
-        },
-        {
-          "name": "Produto 2"
-        }
-      ],
-      "id": 3
+      "id": 1
     }
   ]
 }
