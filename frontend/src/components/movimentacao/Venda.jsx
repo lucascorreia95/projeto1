@@ -16,6 +16,19 @@ const initialState = {
     idCliente:'',
     produto: '',
     idProduto:'',
+    idVenda:'',
+    vendas:[]
+}
+
+const initialState2 = {
+    listaClientes: [],
+    listaProdutos: [],
+    produtos: [],
+    cliente: '',
+    idCliente:'',
+    produto: '',
+    idProduto:'',
+    idVenda:'',
     vendas:[]
 }
 
@@ -25,12 +38,21 @@ const baseUrlVendas = 'http://localhost:3001/vendas'
 
 export default class Venda extends Component {
 
-    state = { ...initialState}
+    state = {...initialState}
 
     componentWillMount(){
+        this.carregaVendas()
+    }
+
+    carregaVendas(){
         axios(baseUrlVendas).then(resp => {
             this.setState({ vendas: resp.data })
         })
+    }
+
+    limpaTela(){
+        this.setState({...initialState2})
+        this.carregaVendas()
     }
 
     updatenField(event){
@@ -53,19 +75,36 @@ export default class Venda extends Component {
         axios(`${baseUrlProdutos}?name_like=${this.state.produto}`).then(resp => {
             this.setState({ ...this.state, listaProdutos: resp.data })
         })
-        console.log(this.state)
     }
 
     load(cliente) {
         const clienteName = cliente.name
         const clienteId = cliente.id
-        this.setState({ cliente: clienteName, idCliente: clienteId, listaClientes:[] })
+        this.setState({ 
+            cliente: clienteName, 
+            idCliente: clienteId, 
+            listaClientes:[] 
+        })
     }
 
     loadP(produto) {
         const produtoName = produto.name
         const produtoId = produto.id
-        this.setState({ produto: produtoName, idProduto: produtoId, listaProdutos:[] })
+        this.setState({ 
+            produto: produtoName, 
+            idProduto: produtoId, 
+            listaProdutos:[] 
+        })
+    }
+
+    loadVenda(venda) {
+        this.carregaVendas()
+        this.setState({ 
+            cliente: venda.cliente,
+            idCliente: venda.idcliente, 
+            produtos: venda.produtos,
+            idVenda: venda.id
+        })
     }
 
     add() {
@@ -74,26 +113,31 @@ export default class Venda extends Component {
         this.setState({...this.state, produtos, produto:'', idProduto:''})
     }
 
-
     save(){
-        console.log(this.state)
+        const method = this.state.idVenda ? 'put' : 'post'
+        const url = this.state.idVenda ? `${baseUrlVendas}/${this.state.idVenda}` : baseUrlVendas
         const venda = {
             cliente: this.state.cliente,
             idcliente: this.state.idCliente,
             produtos: this.state.produtos
         }
-        axios.post(baseUrlVendas, venda)
-            // .then(resp => {
-            //     // const list = this.getUpdatedList(resp.data)
-            //     // this.setState({ user: initialState.user, list})
-            // })
-        // const method = user.id ? 'put' : 'post'
-        // const url = user.id ? `${baseUrl}/${user.id}` : baseUrl
-        // axios[method](url, user)
-        //     .then(resp => {
-        //         const list = this.getUpdatedList(resp.data)
-        //         this.setState({ user: initialState.user, list})
-        //     })
+        axios[method](url, venda)
+            .then( () => {
+                this.limpaTela()
+            })
+    }
+
+    delete(venda) {
+        axios.delete(`${baseUrlVendas}/${venda.id}`)
+        .then( () => {
+            this.limpaTela()
+        })
+    }
+
+    remove(produto){
+        const produtos = this.state.produtos
+        produtos.splice(this.state.produtos.indexOf(produto),1)
+        this.setState({ ...this.state, produtos})
     }
 
     renderTableClientes() {
@@ -218,6 +262,7 @@ export default class Venda extends Component {
                     <thead>
                         <tr>
                             <th>Produtos Adicionados</th>
+                            <th>Remover</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -229,6 +274,10 @@ export default class Venda extends Component {
                         onClick={() => this.save()}>
                             Salvar
                     </button>
+                    <button className="btn btn-secundary"
+                        onClick={() => this.limpaTela()}>
+                            Cancelar
+                    </button>
                 </div>
             </div>
         )
@@ -239,6 +288,12 @@ export default class Venda extends Component {
             return(
                 <tr key={produto.id}>
                     <td>{produto.name}</td>
+                    <td>
+                        <button className="btn btn-danger"
+                            onClick={() => this.remove(produto)}>
+                            <i className="fa fa-close"></i>
+                        </button>
+                    </td>
                 </tr>
             )
         })
@@ -267,14 +322,16 @@ export default class Venda extends Component {
     renderRowsVendas(){
         return this.state.vendas.map(venda => {
             return(
-                <tr key={venda.cliente}>
+                <tr key={venda.id}>
                     <td>{venda.id}</td>
                     <td>{venda.cliente}</td>
                     <td>
-                        <button className="btn btn-warning">
+                        <button className="btn btn-warning"
+                            onClick={() => this.loadVenda(venda)}>
                             <i className="fa fa-pencil"></i>
                         </button>
-                        <button className="btn btn-danger ml-2">
+                        <button className="btn btn-danger ml-2"
+                            onClick={() => this.delete(venda)}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </td>

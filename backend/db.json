@@ -40,25 +40,5 @@
       "id": 3
     }
   ],
-  "vendas": [
-    {
-      "cliente": "Marila Julia da Silva",
-      "idcliente": 2,
-      "produtos": [
-        {
-          "name": "Produto 1",
-          "id": 1
-        },
-        {
-          "name": "Produto 2",
-          "id": 2
-        },
-        {
-          "name": "Produto 3",
-          "id": 3
-        }
-      ],
-      "id": 1
-    }
-  ]
+  "vendas": []
 }
