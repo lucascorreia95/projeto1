@@ -55,6 +55,14 @@ footer.footer{
     grid-area: footer;
 }
 
+div button:nth-child(2){
+    margin-left: 5px;
+}
+
+.margin-bottom{
+    margin-bottom: 50px;
+}
+
 @media(max-width: 768px) {
     .app{
         grid-template-rows:

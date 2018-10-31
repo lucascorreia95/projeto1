@@ -20,18 +20,6 @@ const initialState = {
     vendas:[]
 }
 
-const initialState2 = {
-    listaClientes: [],
-    listaProdutos: [],
-    produtos: [],
-    cliente: '',
-    idCliente:'',
-    produto: '',
-    idProduto:'',
-    idVenda:'',
-    vendas:[]
-}
-
 const baseUrlClientes = 'http://localhost:3001/users'
 const baseUrlProdutos = 'http://localhost:3001/product'
 const baseUrlVendas = 'http://localhost:3001/vendas'
@@ -51,7 +39,17 @@ export default class Venda extends Component {
     }
 
     limpaTela(){
-        this.setState({...initialState2})
+        this.setState({
+            listaClientes: [],
+            listaProdutos: [],
+            produtos: [],
+            cliente: '',
+            idCliente:'',
+            produto: '',
+            idProduto:'',
+            idVenda:'',
+            vendas:[]
+        })
         this.carregaVendas()
     }
 
@@ -108,23 +106,34 @@ export default class Venda extends Component {
     }
 
     add() {
-        let produtos = this.state.produtos
-        produtos.push({name:this.state.produto, id: this.state.idProduto})
-        this.setState({...this.state, produtos, produto:'', idProduto:''})
+        if (!this.state.idProduto){
+            alert( "Selecione o produto!" );
+        }else{
+            let produtos = this.state.produtos
+            produtos.push({name:this.state.produto, id: this.state.idProduto})
+            this.setState({...this.state, produtos, produto:'', idProduto:''})
+        }
     }
 
     save(){
-        const method = this.state.idVenda ? 'put' : 'post'
-        const url = this.state.idVenda ? `${baseUrlVendas}/${this.state.idVenda}` : baseUrlVendas
-        const venda = {
-            cliente: this.state.cliente,
-            idcliente: this.state.idCliente,
-            produtos: this.state.produtos
+
+        if (!this.state.idCliente){
+            alert( "Selecione o cliente!" );
+        }else if (!this.state.produtos.length){
+            alert( "Adicione algum produto!" );
+        }else{
+            const method = this.state.idVenda ? 'put' : 'post'
+            const url = this.state.idVenda ? `${baseUrlVendas}/${this.state.idVenda}` : baseUrlVendas
+            const venda = {
+                cliente: this.state.cliente,
+                idcliente: this.state.idCliente,
+                produtos: this.state.produtos
+            }
+            axios[method](url, venda)
+                .then( () => {
+                    this.limpaTela()
+                })
         }
-        axios[method](url, venda)
-            .then( () => {
-                this.limpaTela()
-            })
     }
 
     delete(venda) {
@@ -141,22 +150,24 @@ export default class Venda extends Component {
     }
 
     renderTableClientes() {
-        return(
-            <div className="row">
-                <table className="table mt-4">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Escolher</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRowsClientes()}
-                    </tbody>
-                </table>
-            </div>
-        )
+        if(this.state.listaClientes.length){
+            return(
+                <div className="row">
+                    <table className="table mt-4 margin-bottom">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Escolher</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderRowsClientes()}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
     }
 
     renderRowsClientes(){
@@ -177,22 +188,24 @@ export default class Venda extends Component {
     }
 
     renderTableProdutos() {
-        return(
-            <div className="row">
-                <table className="table mt-4">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>Marca</th>
-                            <th>Escolher</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRowsProdutos()}
-                    </tbody>
-                </table>
-            </div>
-        )
+        if(this.state.listaProdutos.length){
+            return(
+                <div className="row">
+                    <table className="table mt-4 margin-bottom">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Marca</th>
+                                <th>Escolher</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderRowsProdutos()}
+                        </tbody>
+                    </table>
+                </div>
+            )
+        }
     }
 
     renderRowsProdutos(){
@@ -215,39 +228,39 @@ export default class Venda extends Component {
     renderForm() {
         return (
             <div className="from">
-                <div className="row">
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Cliente:</label>
-                            <input type="text" className="form-control"
-                                value={this.state.cliente}
-                                onChange={e => this.updatenField(e)}
-                                placeholder="Digite o nome ... " />
-                            <button className="btn btn-primary"
-                                onClick={() => this.buscar()}>
-                                <i className="fa fa-search"></i>
-                            </button>
-                        </div>
+                <div className="row margin-bottom">
+                    <div className="col-8">
+                        <label>Cliente:</label>
+                        <input type="text" className="form-control"
+                            value={this.state.cliente}
+                            onChange={e => this.updatenField(e)}
+                            placeholder="Digite o nome ... " />
+                    </div>
+                    <div className="col-4 align-self-end">
+                        <button className="btn btn-primary"
+                            onClick={() => this.buscar()}>
+                            <i className="fa fa-search"></i>
+                        </button>
                     </div>
                 </div>
                 {this.renderTableClientes()}
-                <div className="row">
-                    <div className="col-12 col-md-6">
-                        <div className="form-group">
-                            <label>Produto:</label>
-                            <input type="text" className="form-control"
-                                value={this.state.produto}
-                                onChange={e => this.updatenFieldP(e)}
-                                placeholder="Digite o produto ... " />
-                            <button className="btn btn-primary"
-                                onClick={e => this.buscarP(e)}>
-                                <i className="fa fa-search"></i>
-                            </button>
-                            <button className="btn btn-primary"
-                                onClick={e => this.add(e)}>
-                                <i className="fa fa-plus"></i>
-                            </button>
-                        </div>
+                <div className="row margin-bottom">
+                    <div className="col-8">
+                        <label>Produto:</label>
+                        <input type="text" className="form-control"
+                            value={this.state.produto}
+                            onChange={e => this.updatenFieldP(e)}
+                            placeholder="Digite o produto ... " />
+                    </div>
+                    <div className="col-4 align-self-end">
+                        <button className="btn btn-primary"
+                            onClick={e => this.buscarP(e)}>
+                            <i className="fa fa-search"></i>
+                        </button>
+                        <button className="btn btn-success"
+                            onClick={e => this.add(e)}>
+                            <i className="fa fa-plus"></i>
+                        </button>
                     </div>
                 </div>
                 {this.renderTableProdutos()}
@@ -256,31 +269,35 @@ export default class Venda extends Component {
     }
 
     renderTable() {
-        return(
-            <div className="row">
-                <table className="table mt-4">
-                    <thead>
-                        <tr>
-                            <th>Produtos Adicionados</th>
-                            <th>Remover</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRows()}
-                    </tbody>
-                </table>
-                <div className="col-12 col-md-6 d-flex justify-content-end">
-                    <button className="btn btn-primary"
-                        onClick={() => this.save()}>
-                            Salvar
-                    </button>
-                    <button className="btn btn-secundary"
-                        onClick={() => this.limpaTela()}>
-                            Cancelar
-                    </button>
+        if (this.state.produtos.length){
+            return(
+                <div className="from">
+                    <div className="row">
+                        <table className="table mt-4 margin-bottom">
+                            <thead>
+                                <tr>
+                                    <th>Produtos Adicionados</th>
+                                    <th>Remover</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.renderRows()}
+                            </tbody>
+                        </table>
+                        <div className="col-12 d-flex justify-content-end">
+                            <button className="btn btn-primary"
+                                onClick={() => this.save()}>
+                                    Salvar
+                            </button>
+                            <button className="btn btn-secundary"
+                                onClick={() => this.limpaTela()}>
+                                    Cancelar
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
 
     renderRows(){
@@ -301,20 +318,24 @@ export default class Venda extends Component {
 
     renderTableVendas() {
         return(
-            <div className="row">
-                <h4 className="mb-3">Vendas Realizadas</h4>
-                <table className="table mt-4">
-                    <thead>
-                        <tr>
-                            <th>Venda</th>
-                            <th>Cliente</th>
-                            <th>Acoes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderRowsVendas()}
-                    </tbody>
-                </table>
+            <div className="from">
+                <div className="row">
+                    <div className="col-12">
+                        <h4 className="mb-3">Vendas Realizadas</h4>
+                        <table className="table mt-4">
+                            <thead>
+                                <tr>
+                                    <th>Venda</th>
+                                    <th>Cliente</th>
+                                    <th>Acoes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.renderRowsVendas()}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         )
     }
