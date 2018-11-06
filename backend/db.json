@@ -27,31 +27,38 @@
     {
       "id": 1,
       "name": "Produto 1",
-      "brand": "Marca produto 1"
+      "brand": "Marca produto 1",
+      "valor": "1"
     },
     {
       "name": "Produto 2",
       "brand": "Marca 2",
-      "id": 2
+      "id": 2,
+      "valor": "2"
     },
     {
       "name": "Produto 3",
       "brand": "Marca 3",
-      "id": 3
+      "id": 3,
+      "valor": "3"
+    },
+    {
+      "name": "Produto 4",
+      "brand": "Marca 4",
+      "valor": "4",
+      "id": 4
     }
   ],
   "vendas": [
     {
       "cliente": "Arthur Oliveira",
       "idcliente": 1,
+      "valorVenda": 3,
       "produtos": [
         {
-          "name": "Produto 1",
-          "id": 1
-        },
-        {
-          "name": "Produto 2",
-          "id": 2
+          "name": "Produto 3",
+          "id": 3,
+          "valor": "3"
         }
       ],
       "id": 1

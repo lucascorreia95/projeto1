@@ -55,12 +55,16 @@ footer.footer{
     grid-area: footer;
 }
 
-div button:nth-child(2){
+div button{
     margin-left: 5px;
 }
 
 .margin-bottom{
     margin-bottom: 50px;
+}
+
+.margin-top{
+    margin-top: 15px;
 }
 
 @media(max-width: 768px) {

@@ -10,7 +10,7 @@ const headerProps ={
 
 const baseUrl = 'http://localhost:3001/product'
 const initialState = {
-    product: {name: '', brand: ''},
+    product: {name: '', brand: '', valor: ''},
     list: []
 }
 
@@ -74,6 +74,17 @@ export default class ProductCrud extends Component {
                                 name="brand" value={this.state.product.brand}
                                 onChange={e => this.updatenField(e)}
                                 placeholder="Digite a marca ... " />
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-md-6">
+                        <div className="form-group">
+                            <label>Valor</label>
+                            <input type="text" className="form-control"
+                                name="valor" value={this.state.product.valor}
+                                onChange={e => this.updatenField(e)}
+                                placeholder="Digite o valor ... " />
                         </div>
                     </div>
                 </div>

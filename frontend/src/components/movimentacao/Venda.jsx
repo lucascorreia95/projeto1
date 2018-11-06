@@ -16,7 +16,9 @@ const initialState = {
     idCliente:'',
     produto: '',
     idProduto:'',
+    valorProduto:'',
     idVenda:'',
+    valorVenda:'0',
     vendas:[]
 }
 
@@ -47,7 +49,9 @@ export default class Venda extends Component {
             idCliente:'',
             produto: '',
             idProduto:'',
+            valorProduto:'',
             idVenda:'',
+            valorVenda:'0',
             vendas:[]
         })
         this.carregaVendas()
@@ -61,6 +65,11 @@ export default class Venda extends Component {
     updatenFieldP(event){
         const produto = event.target.value
         this.setState({ ...this.state, produto })
+    }
+
+    updatenFieldV(event){
+        const valorProduto = event.target.value
+        this.setState({ ...this.state, valorProduto })
     }
 
     buscar(){
@@ -88,9 +97,11 @@ export default class Venda extends Component {
     loadP(produto) {
         const produtoName = produto.name
         const produtoId = produto.id
+        const produtoValor = produto.valor
         this.setState({ 
             produto: produtoName, 
-            idProduto: produtoId, 
+            idProduto: produtoId,
+            valorProduto: produtoValor,
             listaProdutos:[] 
         })
     }
@@ -101,22 +112,39 @@ export default class Venda extends Component {
             cliente: venda.cliente,
             idCliente: venda.idcliente, 
             produtos: venda.produtos,
-            idVenda: venda.id
+            idVenda: venda.id,
+            valorVenda: venda.valorVenda
         })
     }
 
     add() {
         if (!this.state.idProduto){
             alert( "Selecione o produto!" );
+        }else if (!this.state.valorProduto){
+            alert( "Informe o valor do produto!" );
+        }else if (this.state.valorProduto < 0){
+            alert( "O valor deve ser maior ou igual a 0 (zero)!" );
         }else{
             let produtos = this.state.produtos
-            produtos.push({name:this.state.produto, id: this.state.idProduto})
-            this.setState({...this.state, produtos, produto:'', idProduto:''})
+            const valor = parseInt(this.state.valorVenda) + parseInt(this.state.valorProduto)
+            produtos.push({
+                name:this.state.produto,
+                id: this.state.idProduto,
+                valor: this.state.valorProduto
+            })
+            this.setState({
+                ...this.state,
+                produtos,
+                produto:'',
+                idProduto:'',
+                valorProduto:'',
+                valorVenda: valor.toString()
+            })
         }
     }
 
     save(){
-
+        
         if (!this.state.idCliente){
             alert( "Selecione o cliente!" );
         }else if (!this.state.produtos.length){
@@ -127,6 +155,7 @@ export default class Venda extends Component {
             const venda = {
                 cliente: this.state.cliente,
                 idcliente: this.state.idCliente,
+                valorVenda: this.state.valorVenda,
                 produtos: this.state.produtos
             }
             axios[method](url, venda)
@@ -145,8 +174,9 @@ export default class Venda extends Component {
 
     remove(produto){
         const produtos = this.state.produtos
+        const valorVenda = parseInt(this.state.valorVenda) - parseInt(produto.valor)
         produtos.splice(this.state.produtos.indexOf(produto),1)
-        this.setState({ ...this.state, produtos})
+        this.setState({ ...this.state, produtos, valorVenda})
     }
 
     renderTableClientes() {
@@ -244,7 +274,7 @@ export default class Venda extends Component {
                     </div>
                 </div>
                 {this.renderTableClientes()}
-                <div className="row margin-bottom">
+                <div className="row">
                     <div className="col-8">
                         <label>Produto:</label>
                         <input type="text" className="form-control"
@@ -263,6 +293,15 @@ export default class Venda extends Component {
                         </button>
                     </div>
                 </div>
+                <div className="row margin-bottom margin-top">
+                    <div className="col-8">
+                        <label>Valor:</label>
+                        <input type="text" className="form-control"
+                            value={this.state.valorProduto}
+                            onChange={e => this.updatenFieldV(e)}
+                            placeholder="Digite o valor ... " />
+                    </div>
+                </div>
                 {this.renderTableProdutos()}
             </div>
         )
@@ -277,6 +316,7 @@ export default class Venda extends Component {
                             <thead>
                                 <tr>
                                     <th>Produtos Adicionados</th>
+                                    <th>Valor</th>
                                     <th>Remover</th>
                                 </tr>
                             </thead>
@@ -284,7 +324,16 @@ export default class Venda extends Component {
                                 {this.renderRows()}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="row margin-bottom">
                         <div className="col-12 d-flex justify-content-end">
+                            <div className="col-9">
+                                <label>Total</label>
+                                <input type="text" className="form-control col-4"
+                                    value={this.state.valorVenda}
+                                    disabled/>    
+                            </div>
+                            
                             <button className="btn btn-primary"
                                 onClick={() => this.save()}>
                                     Salvar
@@ -305,6 +354,7 @@ export default class Venda extends Component {
             return(
                 <tr key={produto.id}>
                     <td>{produto.name}</td>
+                    <td>{produto.valor}</td>
                     <td>
                         <button className="btn btn-danger"
                             onClick={() => this.remove(produto)}>
