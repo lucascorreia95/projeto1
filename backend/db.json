@@ -49,19 +49,5 @@
       "id": 4
     }
   ],
-  "vendas": [
-    {
-      "cliente": "Arthur Oliveira",
-      "idcliente": 1,
-      "valorVenda": 3,
-      "produtos": [
-        {
-          "name": "Produto 3",
-          "id": 3,
-          "valor": "3"
-        }
-      ],
-      "id": 1
-    }
-  ]
+  "vendas": []
 }

@@ -17,6 +17,7 @@ const initialState = {
     produto: '',
     idProduto:'',
     valorProduto:'',
+    quantidadeProduto:'',
     idVenda:'',
     valorVenda:'0',
     vendas:[]
@@ -50,6 +51,7 @@ export default class Venda extends Component {
             produto: '',
             idProduto:'',
             valorProduto:'',
+            quantidadeProduto:'',
             idVenda:'',
             valorVenda:'0',
             vendas:[]
@@ -70,6 +72,11 @@ export default class Venda extends Component {
     updatenFieldV(event){
         const valorProduto = event.target.value
         this.setState({ ...this.state, valorProduto })
+    }
+
+    updatenFieldQ(event){
+        const quantidadeProduto = event.target.value
+        this.setState({ ...this.state, quantidadeProduto })
     }
 
     buscar(){
@@ -126,11 +133,12 @@ export default class Venda extends Component {
             alert( "O valor deve ser maior ou igual a 0 (zero)!" );
         }else{
             let produtos = this.state.produtos
-            const valor = parseInt(this.state.valorVenda) + parseInt(this.state.valorProduto)
+            const valor = parseFloat(this.state.valorVenda) + (parseFloat(this.state.valorProduto)* parseFloat(this.state.quantidadeProduto))
             produtos.push({
                 name:this.state.produto,
                 id: this.state.idProduto,
-                valor: this.state.valorProduto
+                valor: this.state.valorProduto,
+                quantidade: this.state.quantidadeProduto
             })
             this.setState({
                 ...this.state,
@@ -138,8 +146,10 @@ export default class Venda extends Component {
                 produto:'',
                 idProduto:'',
                 valorProduto:'',
+                quantidadeProduto:'',
                 valorVenda: valor.toString()
             })
+            console.log(this.state)
         }
     }
 
@@ -174,7 +184,7 @@ export default class Venda extends Component {
 
     remove(produto){
         const produtos = this.state.produtos
-        const valorVenda = parseInt(this.state.valorVenda) - parseInt(produto.valor)
+        const valorVenda = parseFloat(this.state.valorVenda) - (parseFloat(produto.valor) * parseFloat(produto.quantidade))
         produtos.splice(this.state.produtos.indexOf(produto),1)
         this.setState({ ...this.state, produtos, valorVenda})
     }
@@ -293,6 +303,15 @@ export default class Venda extends Component {
                         </button>
                     </div>
                 </div>
+                <div className="row margin-top">
+                    <div className="col-8">
+                        <label>Quantidade:</label>
+                        <input type="number" className="form-control"
+                            value={this.state.quantidadeProduto}
+                            onChange={e => this.updatenFieldQ(e)}
+                            placeholder="Digite a quantidade ... " />
+                    </div>
+                </div>
                 <div className="row margin-bottom margin-top">
                     <div className="col-8">
                         <label>Valor:</label>
@@ -316,6 +335,7 @@ export default class Venda extends Component {
                             <thead>
                                 <tr>
                                     <th>Produtos Adicionados</th>
+                                    <th>Quantidade</th>
                                     <th>Valor</th>
                                     <th>Remover</th>
                                 </tr>
@@ -329,6 +349,7 @@ export default class Venda extends Component {
                         <div className="col-12 d-flex justify-content-end">
                             <div className="col-9">
                                 <label>Total</label>
+                                
                                 <input type="text" className="form-control col-4"
                                     value={this.state.valorVenda}
                                     disabled/>    
@@ -354,6 +375,7 @@ export default class Venda extends Component {
             return(
                 <tr key={produto.id}>
                     <td>{produto.name}</td>
+                    <td>{produto.quantidade}</td>
                     <td>{produto.valor}</td>
                     <td>
                         <button className="btn btn-danger"
