@@ -49,5 +49,40 @@
       "id": 4
     }
   ],
-  "vendas": []
+  "vendas": [
+    {
+      "cliente": "Lucas",
+      "idcliente": 3,
+      "valorVenda": 15,
+      "produtos": [
+        {
+          "name": "Produto 3",
+          "id": 3,
+          "valor": "3",
+          "quantidade": "5"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "cliente": "Arthur Oliveira",
+      "idcliente": 1,
+      "valorVenda": 13,
+      "produtos": [
+        {
+          "name": "Produto 1",
+          "id": 1,
+          "valor": "1",
+          "quantidade": "1"
+        },
+        {
+          "name": "Produto 3",
+          "id": 3,
+          "valor": "3",
+          "quantidade": "4"
+        }
+      ],
+      "id": 2
+    }
+  ]
 }

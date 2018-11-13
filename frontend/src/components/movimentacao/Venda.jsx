@@ -127,6 +127,10 @@ export default class Venda extends Component {
     add() {
         if (!this.state.idProduto){
             alert( "Selecione o produto!" );
+        }else if (!this.state.quantidadeProduto){
+            alert( "Informe a quantidade do produto!" );
+        }else if (this.state.quantidadeProduto < 1){
+            alert( "A quantidade deve ser maior ou igual a 1 (um)!" );
         }else if (!this.state.valorProduto){
             alert( "Informe o valor do produto!" );
         }else if (this.state.valorProduto < 0){
@@ -149,7 +153,6 @@ export default class Venda extends Component {
                 quantidadeProduto:'',
                 valorVenda: valor.toString()
             })
-            console.log(this.state)
         }
     }
 
@@ -189,11 +192,19 @@ export default class Venda extends Component {
         this.setState({ ...this.state, produtos, valorVenda})
     }
 
+    formatMoney(valor){
+        let money = parseFloat(valor)
+        return(
+            money.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})
+        )
+    }
+
     renderTableClientes() {
         if(this.state.listaClientes.length){
             return(
                 <div className="row">
-                    <table className="table mt-4 margin-bottom">
+                    <h4 className="h4 col-8">Escolha um dos Clientes a baixo ...</h4>
+                    <table className="table mb-5">
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -230,8 +241,9 @@ export default class Venda extends Component {
     renderTableProdutos() {
         if(this.state.listaProdutos.length){
             return(
-                <div className="row">
-                    <table className="table mt-4 margin-bottom">
+                <div className="row mt-4">
+                    <h4 className="h4 col-8">Escolha um dos Produtos a baixo ...</h4>
+                    <table className="table mt-4">
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -268,7 +280,7 @@ export default class Venda extends Component {
     renderForm() {
         return (
             <div className="from">
-                <div className="row margin-bottom">
+                <div className="row mb-5">
                     <div className="col-8">
                         <label>Cliente:</label>
                         <input type="text" className="form-control"
@@ -303,7 +315,8 @@ export default class Venda extends Component {
                         </button>
                     </div>
                 </div>
-                <div className="row margin-top">
+                {this.renderTableProdutos()}
+                <div className="row mt-4">
                     <div className="col-8">
                         <label>Quantidade:</label>
                         <input type="number" className="form-control"
@@ -312,7 +325,7 @@ export default class Venda extends Component {
                             placeholder="Digite a quantidade ... " />
                     </div>
                 </div>
-                <div className="row margin-bottom margin-top">
+                <div className="row mb-5 mt-4">
                     <div className="col-8">
                         <label>Valor:</label>
                         <input type="text" className="form-control"
@@ -321,7 +334,6 @@ export default class Venda extends Component {
                             placeholder="Digite o valor ... " />
                     </div>
                 </div>
-                {this.renderTableProdutos()}
             </div>
         )
     }
@@ -331,7 +343,7 @@ export default class Venda extends Component {
             return(
                 <div className="from">
                     <div className="row">
-                        <table className="table mt-4 margin-bottom">
+                        <table className="table mt-4 mb-5">
                             <thead>
                                 <tr>
                                     <th>Produtos Adicionados</th>
@@ -345,13 +357,13 @@ export default class Venda extends Component {
                             </tbody>
                         </table>
                     </div>
-                    <div className="row margin-bottom">
-                        <div className="col-12 d-flex justify-content-end">
+                    <div className="row mb-5">
+                        <div className="col-12 d-flex">
                             <div className="col-9">
                                 <label>Total</label>
                                 
                                 <input type="text" className="form-control col-4"
-                                    value={this.state.valorVenda}
+                                    value={this.formatMoney(this.state.valorVenda)}
                                     disabled/>    
                             </div>
                             
@@ -376,7 +388,7 @@ export default class Venda extends Component {
                 <tr key={produto.id}>
                     <td>{produto.name}</td>
                     <td>{produto.quantidade}</td>
-                    <td>{produto.valor}</td>
+                    <td>{this.formatMoney(produto.valor)}</td>
                     <td>
                         <button className="btn btn-danger"
                             onClick={() => this.remove(produto)}>
@@ -390,7 +402,7 @@ export default class Venda extends Component {
 
     renderTableVendas() {
         return(
-            <div className="from">
+            <div className="from mt-4">
                 <div className="row">
                     <div className="col-12">
                         <h4 className="mb-3">Vendas Realizadas</h4>
